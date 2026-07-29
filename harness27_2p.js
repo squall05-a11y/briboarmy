@@ -1,6 +1,11 @@
+// 2인 동기: 락스텝 완전 일치 검사 (가짜 MQTT 릴레이로 H/G 두 인스턴스 구동)
+// TASK-02: detkit 결정성 키트 적용 — 컨텍스트별 시드 난수·가상 시계·가상 타이머 큐·muted
 const vm=require('vm');
 const fs=require('fs');
-const src=fs.readFileSync('/tmp/v8.js','utf-8');
+const dk=require('./detkit.js');
+const SEED=+(process.env.SEED||4242);
+const RH=dk.rhythm();
+const src=dk.boot(SEED,{timers:true})+fs.readFileSync(dk.ensureSrc(fs),'utf-8');
 
 // ── 공유 가짜 릴레이 ──
 const bus={q:[],subs:{h:[],g:[]},send(role,topic,payload,delay){
@@ -16,34 +21,9 @@ const bus={q:[],subs:{h:[],g:[]},send(role,topic,payload,delay){
 };
 
 function mkCtx(name){
-  const elems={};
-  function mkEl(){const el={style:{},_cls:new Set(),dataset:{},
-    classList:{add(c){el._cls.add(c)},remove(c){el._cls.delete(c)},toggle(){},contains(c){return el._cls.has(c)}},
-    set className(v){el._c=v},get className(){return el._c||""},
-    textContent:"",innerHTML:"",appendChild(){},remove(){},value:"",
-    querySelector(){return mkEl()},querySelectorAll(){return[]},children:[],firstChild:null,
-    addEventListener(){},onclick:null,
-    getBoundingClientRect:()=>({width:390,height:560,left:0,top:0}),
-    getContext:()=>new Proxy({},{get:(t,p)=>{
-      if(p==='createLinearGradient')return()=>({addColorStop(){}});
-      return()=>{};},set:()=>true}),width:0,height:0};return el;}
-  const g={};
+  const g=dk.stubDom({});
   g.errors=[];
-  g.performance={now:()=>Date.now()};
-  g.document={addEventListener(){},getElementById:id=>elems[id]||(elems[id]=mkEl()),
-    createElement:()=>mkEl(),querySelectorAll:()=>[]};
-  g.window=g; g.addEventListener=(ev,fn)=>{if(ev==="error")g._errFn=fn;};
-  g.navigator={}; g.devicePixelRatio=2;
-  g.requestAnimationFrame=()=>{};
-  g.setInterval=()=>0; g.clearInterval=()=>{}; g.setTimeout=()=>0;
   g.console=console;
-  g.AudioContext=function(){this.state="running";this.currentTime=0;this.sampleRate=44100;this.destination={};
-    this.createOscillator=()=>({type:"",frequency:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){},start(){},stop(){}});
-    this.createGain=()=>({gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){}});
-    this.createBuffer=()=>({getChannelData:()=>new Float32Array(100)});
-    this.createBufferSource=()=>({connect(){},start(){}});
-    this.createBiquadFilter=()=>({type:"",frequency:{},connect(){}});
-    this.resume=()=>{}};
   const role=name;
   g.mqtt={connect:()=>{
     const client={handlers:{},
@@ -54,8 +34,11 @@ function mkCtx(name){
   const ctx=vm.createContext(g);
   vm.runInContext(src,ctx);
   vm.runInContext('showErr=(m)=>{errors.push(String(m));};',ctx);
+  vm.runInContext('muted=true;',ctx); // 사운드 난수 절도 차단
   return ctx;
 }
+
+function spin(){if(RH&&RH.ms){const t0=Date.now();while(Date.now()-t0<RH.ms);}}
 
 try{
 const H=mkCtx("h"), G=mkCtx("g");
@@ -73,10 +56,12 @@ console.log("시작상태 H:",vm.runInContext('NET.started+" tick"+NET.tick',H),
             "| G:",vm.runInContext('NET.started+" tick"+NET.tick',G));
 
 // 60초 구동 + 10초 지점 방장 삼각형/게스트 고용 명령
+const STEP='if(NET.started){__vtTick(1/30);netTick(1/30);__vtFlush();}';
 for(let f=0;f<70*30;f++){
+  if(RH&&RH.every&&f%RH.every===0)spin();
   bus.now++;
-  vm.runInContext('if(NET.started)netTick(1/30)',H);
-  vm.runInContext('if(NET.started)netTick(1/30)',G);
+  vm.runInContext(STEP,H);
+  vm.runInContext(STEP,G);
   bus.flush();
   if(f===300)vm.runInContext('if(triadOffer)issueCmd("triad",{k:"pop"})',H);
   if(f===330)vm.runInContext('issueCmd("hire",{u:"club"})',G);
@@ -102,4 +87,7 @@ console.log("에러 G:",vm.runInContext('errors.slice(0,3).join(" | ")||"없음"
 const hs=vm.runInContext('army.length+","+Math.round(P.gold)+","+Math.round(E.gold)',H);
 const gs=vm.runInContext('army.length+","+Math.round(P.gold)+","+Math.round(E.gold)',G);
 console.log("동기화 검사 H:["+hs+"] G:["+gs+"] →",hs===gs?"일치 ✓":"불일치 ✗ DESYNC");
+const det=C=>vm.runInContext('"t"+NET.tick+"|kP"+P.kills+"|kE"+E.kills+"|eP"+P.era+"|eE"+E.era+"|gP"+Math.round(P.gold)+"|gE"+Math.round(E.gold)+"|hP"+Math.round(P.cmdHp)+"|hE"+Math.round(E.cmdHp)+"|n"+army.length+"|rng"+__rngN+"|vtQ"+__vtPending()+"|vtErr"+__vtErrs.length',C);
+console.log("DET|H|"+det(H));
+console.log("DET|G|"+det(G));
 }catch(e){console.log("HARNESS ERR:",e.stack);}

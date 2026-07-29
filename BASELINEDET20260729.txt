@@ -1,0 +1,94 @@
+# 결정적 기준선 — 2026-07-29 (TASK-02 4단계)
+# 게임: index.html (함선 필터 3곳 적용본, TASK-01 완료 상태)
+# 재현: SEED=<시드> BUILD=<빌드> D=<난이도> node harness30.js — 같은 시드는 같은 판
+# 형식: 요약라인 / DET라인 쌍
+## SEED=4242 BUILD=mass D=hard
+mass|hard|패배|406s|P0E3|E건설14|교착105s|E해군0|전환0|E핵기지0|E항모0
+DET|t406|kP36|kE68|eP0|eE3|gP66|gE282|hP-2|hE12583|n53|rng15548|vtQ13|vtErr0
+## SEED=4242 BUILD=mass D=hell
+mass|hell|패배|196s|P0E1|E건설6|교착0s|E해군0|전환0|E핵기지0|E항모0
+DET|t196|kP23|kE63|eP0|eE1|gP35|gE450|hP-23|hE7680|n27|rng13158|vtQ16|vtErr0
+## SEED=4242 BUILD=hero D=hard
+hero|hard|패배|192s|P0E1|E건설6|교착0s|E해군0|전환0|E핵기지0|E항모0
+DET|t192|kP26|kE57|eP0|eE1|gP137|gE601|hP-4|hE7680|n19|rng8616|vtQ11|vtErr0
+## SEED=4242 BUILD=hero D=hell
+hero|hell|패배|314s|P0E3|E건설12|교착75s|E해군0|전환1|E핵기지0|E항모0
+DET|t314|kP56|kE67|eP0|eE3|gP169|gE459|hP-9|hE12583|n46|rng17363|vtQ14|vtErr0
+## SEED=4242 BUILD=civ D=hard
+civ|hard|패배|283s|P2E2|E건설13|교착30s|E해군0|전환0|E핵기지0|E항모0
+DET|t283|kP20|kE133|eP2|eE2|gP371|gE274|hP-24|hE9830|n32|rng15715|vtQ14|vtErr0
+## SEED=4242 BUILD=civ D=hell
+civ|hell|패배|267s|P2E2|E건설8|교착0s|E해군0|전환1|E핵기지0|E항모0
+DET|t267|kP39|kE152|eP2|eE2|gP359|gE326|hP-6|hE9830|n21|rng14779|vtQ17|vtErr0
+## SEED=4242 BUILD=struct D=hard
+struct|hard|패배|189s|P0E1|E건설8|교착0s|E해군0|전환0|E핵기지0|E항모0
+DET|t189|kP24|kE50|eP0|eE1|gP37|gE928|hP-44|hE7680|n21|rng8789|vtQ16|vtErr0
+## SEED=4242 BUILD=struct D=hell
+struct|hell|승리|335s|P0E2|E건설8|교착60s|E해군3|전환4|E핵기지0|E항모0
+DET|t335|kP200|kE10|eP0|eE2|gP40|gE403|hP6000|hE-284|n25|rng26062|vtQ11|vtErr0
+## SEED=4242 BUILD=mixed D=hard
+mixed|hard|패배|188s|P0E1|E건설10|교착0s|E해군0|전환1|E핵기지0|E항모0
+DET|t188|kP20|kE52|eP0|eE1|gP111|gE1033|hP-70|hE7680|n22|rng7653|vtQ9|vtErr0
+## SEED=4242 BUILD=mixed D=hell
+mixed|hell|패배|288s|P0E2|E건설11|교착45s|E해군0|전환0|E핵기지0|E항모0
+DET|t288|kP11|kE72|eP0|eE2|gP147|gE316|hP-82|hE9830|n45|rng10696|vtQ9|vtErr0
+## SEED=5000 BUILD=mass D=hard
+mass|hard|교착|700s|P0E7|E건설23|교착315s|E해군0|전환0|E핵기지0|E항모0
+DET|t700|kP59|kE129|eP0|eE7|gP10|gE396|hP6000|hE33777|n110|rng50337|vtQ11|vtErr0
+## SEED=5000 BUILD=mass D=hell
+mass|hell|패배|482s|P0E5|E건설16|교착90s|E해군0|전환0|E핵기지0|E항모0
+DET|t482|kP51|kE88|eP0|eE5|gP33|gE648|hP-4|hE20616|n61|rng24892|vtQ14|vtErr0
+## SEED=5000 BUILD=hero D=hard
+hero|hard|패배|201s|P0E1|E건설9|교착0s|E해군0|전환0|E핵기지0|E항모0
+DET|t201|kP23|kE74|eP0|eE1|gP154|gE864|hP-13|hE7680|n15|rng8116|vtQ13|vtErr0
+## SEED=5000 BUILD=hero D=hell
+hero|hell|패배|256s|P0E2|E건설9|교착45s|E해군0|전환0|E핵기지0|E항모0
+DET|t256|kP11|kE68|eP0|eE2|gP152|gE222|hP-101|hE9830|n33|rng9482|vtQ22|vtErr0
+## SEED=5000 BUILD=civ D=hard
+civ|hard|패배|153s|P1E1|E건설4|교착0s|E해군0|전환0|E핵기지0|E항모0
+DET|t153|kP14|kE101|eP1|eE1|gP433|gE453|hP-1|hE7680|n20|rng8502|vtQ5|vtErr0
+## SEED=5000 BUILD=civ D=hell
+civ|hell|패배|526s|P3E7|E건설26|교착45s|E해군0|전환0|E핵기지0|E항모0
+DET|t526|kP132|kE171|eP3|eE7|gP935|gE1074|hP-18|hE33777|n27|rng37144|vtQ24|vtErr0
+## SEED=5000 BUILD=struct D=hard
+struct|hard|패배|117s|P0E1|E건설4|교착0s|E해군0|전환0|E핵기지0|E항모0
+DET|t117|kP1|kE60|eP0|eE1|gP108|gE471|hP-119|hE7680|n22|rng3929|vtQ11|vtErr0
+## SEED=5000 BUILD=struct D=hell
+struct|hell|패배|178s|P0E1|E건설2|교착0s|E해군0|전환0|E핵기지0|E항모0
+DET|t178|kP40|kE60|eP0|eE1|gP102|gE545|hP-154|hE7680|n26|rng9234|vtQ13|vtErr0
+## SEED=5000 BUILD=mixed D=hard
+mixed|hard|패배|186s|P0E1|E건설3|교착0s|E해군0|전환0|E핵기지0|E항모0
+DET|t186|kP19|kE56|eP0|eE1|gP40|gE453|hP-17|hE7680|n17|rng10653|vtQ16|vtErr0
+## SEED=5000 BUILD=mixed D=hell
+mixed|hell|패배|475s|P0E5|E건설21|교착105s|E해군0|전환0|E핵기지0|E항모0
+DET|t475|kP45|kE88|eP0|eE5|gP94|gE338|hP-28|hE20616|n65|rng21067|vtQ18|vtErr0
+## SEED=6000 BUILD=mass D=hard
+mass|hard|패배|287s|P0E2|E건설11|교착75s|E해군0|전환0|E핵기지0|E항모0
+DET|t287|kP30|kE66|eP0|eE2|gP77|gE296|hP-21|hE9830|n22|rng11567|vtQ15|vtErr0
+## SEED=6000 BUILD=mass D=hell
+mass|hell|승리|114s|P0E0|E건설0|교착0s|E해군0|전환2|E핵기지0|E항모0
+DET|t114|kP36|kE2|eP0|eE0|gP41|gE60|hP6000|hE-65|n14|rng4638|vtQ11|vtErr0
+## SEED=6000 BUILD=hero D=hard
+hero|hard|패배|144s|P0E1|E건설3|교착0s|E해군0|전환0|E핵기지0|E항모0
+DET|t144|kP14|kE54|eP0|eE1|gP203|gE341|hP-44|hE7680|n15|rng9092|vtQ10|vtErr0
+## SEED=6000 BUILD=hero D=hell
+hero|hell|패배|326s|P0E3|E건설13|교착90s|E해군0|전환1|E핵기지0|E항모0
+DET|t326|kP32|kE74|eP0|eE3|gP180|gE833|hP-8|hE12583|n51|rng10888|vtQ13|vtErr0
+## SEED=6000 BUILD=civ D=hard
+civ|hard|패배|377s|P2E3|E건설11|교착45s|E해군0|전환0|E핵기지0|E항모0
+DET|t377|kP55|kE201|eP2|eE3|gP572|gE535|hP-251|hE12583|n30|rng22035|vtQ8|vtErr0
+## SEED=6000 BUILD=civ D=hell
+civ|hell|패배|292s|P1E3|E건설8|교착0s|E해군0|전환0|E핵기지0|E항모0
+DET|t292|kP40|kE186|eP1|eE3|gP433|gE382|hP-35|hE12583|n13|rng14300|vtQ10|vtErr0
+## SEED=6000 BUILD=struct D=hard
+struct|hard|패배|140s|P0E1|E건설2|교착0s|E해군0|전환1|E핵기지0|E항모0
+DET|t140|kP15|kE60|eP0|eE1|gP33|gE379|hP-83|hE7680|n21|rng5372|vtQ24|vtErr0
+## SEED=6000 BUILD=struct D=hell
+struct|hell|교착|700s|P0E7|E건설24|교착240s|E해군15|전환4|E핵기지0|E항모0
+DET|t700|kP115|kE108|eP0|eE7|gP86|gE690|hP6000|hE33777|n64|rng54557|vtQ10|vtErr0
+## SEED=6000 BUILD=mixed D=hard
+mixed|hard|패배|342s|P0E2|E건설8|교착90s|E해군0|전환0|E핵기지0|E항모0
+DET|t342|kP37|kE73|eP0|eE2|gP164|gE189|hP-4|hE9830|n30|rng12002|vtQ5|vtErr0
+## SEED=6000 BUILD=mixed D=hell
+mixed|hell|승리|135s|P0E0|E건설1|교착0s|E해군0|전환2|E핵기지0|E항모0
+DET|t135|kP40|kE12|eP0|eE0|gP40|gE0|hP6000|hE-84|n18|rng5908|vtQ12|vtErr0

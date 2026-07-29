@@ -1,40 +1,24 @@
 // v6 가로축 스모크: 무크래시 + 승패 발생 + 삼각형 독 자동 소비
-global.performance={now:()=>Date.now()};
-const elems={};
-function mkEl(){const el={style:{},_cls:new Set(),dataset:{},
-  classList:{add(c){el._cls.add(c)},remove(c){el._cls.delete(c)},toggle(){},contains(c){return el._cls.has(c)}},
-  set className(v){el._c=v},get className(){return el._c||""},
-  textContent:"",innerHTML:"",appendChild(){},remove(){},
-  querySelector(){return mkEl()},querySelectorAll(){return[]},children:[],firstChild:null,
-  addEventListener(){},onclick:null,
-  getBoundingClientRect:()=>({width:390,height:560,left:0,top:0}),
-  getContext:()=>new Proxy({},{get:(t,p)=>{
-    if(p==='createLinearGradient')return()=>({addColorStop(){}});
-    return()=>{};}, set:()=>true}),width:0,height:0};return el;}
-global.document={getElementById:id=>elems[id]||(elems[id]=mkEl()),
-  createElement:()=>mkEl(),querySelectorAll:()=>[]};
-global.window=global; global.addEventListener=()=>{};
-global.navigator={}; global.devicePixelRatio=2;
-global.requestAnimationFrame=()=>{};
-global.setInterval=()=>0; global.clearInterval=()=>{}; global.setTimeout=()=>0;
-global.AudioContext=function(){this.state="running";this.currentTime=0;this.sampleRate=44100;this.destination={};
-  this.createOscillator=()=>({type:"",frequency:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){},start(){},stop(){}});
-  this.createGain=()=>({gain:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){}});
-  this.createBuffer=()=>({getChannelData:()=>new Float32Array(100)});
-  this.createBufferSource=()=>({connect(){},start(){}});
-  this.createBiquadFilter=()=>({type:"",frequency:{},connect(){}});
-  this.resume=()=>{}};
-let src=require('fs').readFileSync('/tmp/v8.js','utf-8');
+// TASK-02: detkit 결정성 키트 적용 — 시드 난수·가상 시계·가상 타이머 큐·muted
+const dk = require('./detkit.js');
+const SEED = +(process.env.SEED || 4242);
+dk.stubDom(global);
+global.__rh = dk.rhythm();
+const fs = require('fs');
+let src = dk.boot(SEED, { timers: true }) + fs.readFileSync(dk.ensureSrc(fs), 'utf-8');
 src+=`
 ;(function(){
 try{
   for(let run=0;run<6;run++){
+    __vtReset(${SEED}+run*1000);
     DIFF=DIFFS[run<3?"normal":"hard"];
+    muted=true; // 사운드 난수 절도 차단 — 게임 시작 직전
     startGame();
     let ci=0,hireT=0,tactT=0;
     const cycle=["pop","wep","civ"];
     for(let i=0;i<12*60*30;i++){
-      update(1/30);draw();
+      __rhSpin(i);
+      __vtTick(1/30);update(1/30);__vtFlush();draw();
       if(!running)break;
     if(P.cmdHp<=0||E.cmdHp<=0){running=false;break;} // 결착 즉시 정지
       if(triadOffer){
@@ -62,6 +46,10 @@ try{
     }
     const res=running?"TIMEOUT12분":(P.cmdHp<=0?"패배":"승리")+" "+gameTime.toFixed(0)+"s";
     console.log("["+(run<3?"보통":"어려움")+"] vs "+E.faction.name+" → "+res+" | 시대P"+P.era+"E"+E.era+" 병력"+P.maxArmy);
+    console.log("DET|g"+run+"|t"+Math.round(gameTime)+"|kP"+P.kills+"|kE"+E.kills
+      +"|eP"+P.era+"|eE"+E.era+"|gP"+Math.round(P.gold)+"|gE"+Math.round(E.gold)
+      +"|hP"+Math.round(P.cmdHp)+"|hE"+Math.round(E.cmdHp)+"|n"+army.length
+      +"|rng"+__rngN+"|vtQ"+__vtPending()+"|vtErr"+__vtErrs.length);
   }
   console.log("SMOKE OK");
 }catch(e){console.log("ERR:",e.stack||String(e));}
