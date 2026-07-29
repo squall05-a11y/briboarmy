@@ -1879,14 +1879,14 @@ function applyItem(S,it){
   if(it.ch==="❤️"){for(const u of army)if(u.side===S)u.hp=Math.min(u.maxHp,u.hp+u.maxHp*0.3);
     S.cmdHp=Math.min(S.cmdMaxHp,S.cmdHp+S.cmdMaxHp*0.25);if(mineI)SFX.coin();say("❤️ 전군 회복");}
   if(it.ch==="⚡"){S.buffT=10;if(mineI)SFX.coin();say("⚡ 10초간 공격속도 +50%");}
-  if(it.ch==="🎁"){const pool=UNITS.filter(u=>u.era===S.era&&!u.hidden&&!u.hero);
+  if(it.ch==="🎁"){const pool=UNITS.filter(u=>u.era===S.era&&!u.hidden&&!u.hero&&!u.naval);
     const u=pool[Math.floor((NET.on?SR():Math.random())*pool.length)];addUnit(S,u.id,1);say(`🎁 ${u.name} 합류!`);}
 }
 
 /* ═══════════ 전략 삼각형 (선택) ═══════════ */
 function triadCards(side){
   const era=side.era;
-  const popPool=UNITS.filter(u=>u.era===era&&!u.hidden);
+  const popPool=UNITS.filter(u=>u.era===era&&!u.hidden&&!u.naval);
   const pu=popPool[Math.floor(SR()*popPool.length)];
   const popN=pu.big?1:(pu.pack||1)*2;
   const weps=[
@@ -2020,7 +2020,7 @@ function onEraUp(s){
     toast(`⚠ ${s.faction.ch} ${s.faction.name}이 ${era.name.slice(2)}에 진입, 총공세를 개시했다!`,"red");SFX.alarm();
     // AI 보상 (슬롯 등가)
     s.gold+=150*s.era;
-    const pool=UNITS.filter(u=>u.era===s.era&&!u.hidden);
+    const pool=UNITS.filter(u=>u.era===s.era&&!u.hidden&&!u.naval);
     if(!NET.on)for(let i=0;i<3;i++){const u=pool[Math.floor(Math.random()*pool.length)];addUnit(s,u.id,u.pack||1,true);}
     const ts=TACTICS[[0,0,0,1,1,1,2,2][Math.min(s.era,7)]];
     s.tacticSel[s.era]=ts[Math.floor(Math.random()*ts.length)];
