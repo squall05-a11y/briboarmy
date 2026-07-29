@@ -21,8 +21,8 @@
 
 ## 파일 구조
 - `index.html` — 게임 본체 (단일 파일)
-- `kit/` — 하네스·문서 (harness23/27/30, diag, runAB.sh)
-- 하네스 실행: 게임에서 `<script>` 추출 → `/tmp/v8.js` → `node kit/harness23.js`
+- 하네스·문서는 저장소 루트에 평면 배치 — `harness23.js` / `harness27_2p.js` / `harness30.js`, `diag.js`, `runAB.sh`, `HARNESS.md`, `MIGRATION.md`
+- 하네스 실행: 게임에서 `<script>` 추출 → `/tmp/v8.js` → `node harness23.js`
 
 ## 현재 상태 요약 (이사 시점)
 8시대 엔진 / 바다·해군·제해권·항모 소티 / 미사일 기지·아이언돔·대공포 / 함락전 30초 / 개국 이념 3택 / AI 자기평가 루프(전술 전환·해상 우회) / 시간 강제 종료 장치 제거(stallStage 관 유지, 상시 0) / 교착 관측기(계측 전용).
